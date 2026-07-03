@@ -1,4 +1,5 @@
 """Tests for CLI."""
+
 import textwrap
 
 from click.testing import CliRunner
@@ -17,11 +18,13 @@ def test_main_help():
 def test_audit_python_project(tmp_path):
     """Test auditing a Python project."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test"
         dependencies = ["click>=8.0"]
-    """))
+    """)
+    )
 
     runner = CliRunner()
     result = runner.invoke(main, ["audit", str(tmp_path), "--offline"])
@@ -32,17 +35,20 @@ def test_audit_python_project(tmp_path):
 def test_audit_json_format(tmp_path):
     """Test auditing with JSON output."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test"
         dependencies = ["click>=8.0"]
-    """))
+    """)
+    )
 
     runner = CliRunner()
     result = runner.invoke(main, ["audit", str(tmp_path), "--offline", "--format", "json"])
 
     assert result.exit_code == 1
     import json
+
     data = json.loads(result.output)
     assert data["summary"]["total_dependencies"] == 1
 
@@ -50,11 +56,13 @@ def test_audit_json_format(tmp_path):
 def test_audit_markdown_format(tmp_path):
     """Test auditing with Markdown output."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test"
         dependencies = []
-    """))
+    """)
+    )
 
     runner = CliRunner()
     result = runner.invoke(main, ["audit", str(tmp_path), "--offline", "--format", "markdown"])
@@ -66,11 +74,13 @@ def test_audit_markdown_format(tmp_path):
 def test_audit_csv_format(tmp_path):
     """Test auditing with CSV output."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test"
         dependencies = []
-    """))
+    """)
+    )
 
     runner = CliRunner()
     result = runner.invoke(main, ["audit", str(tmp_path), "--offline", "--format", "csv"])
@@ -82,18 +92,26 @@ def test_audit_csv_format(tmp_path):
 def test_audit_output_file(tmp_path):
     """Test writing audit output to file."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test"
         dependencies = []
-    """))
+    """)
+    )
 
     output_file = tmp_path / "report.txt"
     runner = CliRunner()
-    result = runner.invoke(main, [
-        "audit", str(tmp_path), "--offline",
-        "--output", str(output_file),
-    ])
+    result = runner.invoke(
+        main,
+        [
+            "audit",
+            str(tmp_path),
+            "--offline",
+            "--output",
+            str(output_file),
+        ],
+    )
 
     assert result.exit_code == 0
     assert output_file.exists()

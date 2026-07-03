@@ -1,4 +1,5 @@
 """Tests for data models."""
+
 from licenselens.models import (
     AuditReport,
     AuditSummary,

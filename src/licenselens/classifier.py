@@ -1,4 +1,5 @@
 """License classifier and compatibility engine."""
+
 from __future__ import annotations
 
 from licenselens.models import (
@@ -23,7 +24,6 @@ KNOWN_LICENSES: dict[str, License] = {
     "Zlib": License("Zlib", "zlib License", LicenseCategory.PERMISSIVE, is_osi_approved=True, is_fsf_free=True),
     "BlueOak-1.0.0": License("BlueOak-1.0.0", "Blue Oak Model License 1.0.0", LicenseCategory.PERMISSIVE, is_osi_approved=True),
     "Python-2.0": License("Python-2.0", "Python License 2.0", LicenseCategory.PERMISSIVE, is_osi_approved=True, is_fsf_free=True),
-
     # Weak copyleft
     "LGPL-2.1": License("LGPL-2.1", "GNU Lesser General Public License v2.1", LicenseCategory.WEAK_COPYLEFT, is_osi_approved=True, is_fsf_free=True),
     "LGPL-3.0": License("LGPL-3.0", "GNU Lesser General Public License v3.0", LicenseCategory.WEAK_COPYLEFT, is_osi_approved=True, is_fsf_free=True),
@@ -35,19 +35,15 @@ KNOWN_LICENSES: dict[str, License] = {
     "EUPL-1.1": License("EUPL-1.1", "European Union Public License 1.1", LicenseCategory.WEAK_COPYLEFT, is_osi_approved=True),
     "Artistic-2.0": License("Artistic-2.0", "Artistic License 2.0", LicenseCategory.WEAK_COPYLEFT, is_osi_approved=True, is_fsf_free=True),
     "BSL-1.0": License("BSL-1.0", "Boost Software License 1.0", LicenseCategory.PERMISSIVE, is_osi_approved=True),
-
     # Strong copyleft
     "GPL-2.0": License("GPL-2.0", "GNU General Public License v2.0", LicenseCategory.STRONG_COPYLEFT, is_osi_approved=True, is_fsf_free=True),
     "GPL-3.0": License("GPL-3.0", "GNU General Public License v3.0", LicenseCategory.STRONG_COPYLEFT, is_osi_approved=True, is_fsf_free=True),
     "AGPL-3.0": License(
-        "AGPL-3.0", "GNU Affero General Public License v3.0",
-        LicenseCategory.NETWORK_COPYLEFT, is_osi_approved=True, is_fsf_free=True
+        "AGPL-3.0", "GNU Affero General Public License v3.0", LicenseCategory.NETWORK_COPYLEFT, is_osi_approved=True, is_fsf_free=True
     ),
-
     # Network copyleft
     "SSPL-1.0": License("SSPL-1.0", "Server Side Public License 1.0", LicenseCategory.NETWORK_COPYLEFT),
     "BSL-1.1": License("BSL-1.1", "Business Source License 1.1", LicenseCategory.NETWORK_COPYLEFT),
-
     # Proprietary
     "LicenseRef-Proprietary": License("LicenseRef-Proprietary", "Proprietary", LicenseCategory.PROPRIETARY),
 }
@@ -64,14 +60,12 @@ LICENSE_COMPATIBILITY: dict[tuple[str, str], tuple[bool, str]] = {
     ("MIT", "ISC"): (True, "Both permissive licenses, functionally equivalent"),
     ("Apache-2.0", "Apache-2.0"): (True, "Same license"),
     ("Apache-2.0", "MIT"): (True, "Apache 2.0 and MIT are compatible"),
-
     # Permissive + Weak copyleft
     ("MIT", "LGPL-2.1"): (True, "MIT code can be used with LGPL libraries"),
     ("MIT", "LGPL-3.0"): (True, "MIT code can be used with LGPL libraries"),
     ("MIT", "MPL-2.0"): (True, "MIT is compatible with MPL-2.0"),
     ("Apache-2.0", "LGPL-2.1"): (True, "Apache 2.0 compatible with LGPL"),
     ("Apache-2.0", "LGPL-3.0"): (True, "Apache 2.0 compatible with LGPL 3.0"),
-
     # Permissive + Strong copyleft
     ("MIT", "GPL-2.0"): (True, "MIT code can be relicensed under GPL-2.0"),
     ("MIT", "GPL-3.0"): (True, "MIT code can be relicensed under GPL-3.0"),
@@ -79,7 +73,6 @@ LICENSE_COMPATIBILITY: dict[tuple[str, str], tuple[bool, str]] = {
     ("Apache-2.0", "GPL-3.0"): (True, "Apache 2.0 compatible with GPL-3.0"),
     ("MIT", "AGPL-3.0"): (True, "MIT code can be relicensed under AGPL-3.0"),
     ("Apache-2.0", "AGPL-3.0"): (True, "Apache 2.0 compatible with AGPL-3.0"),
-
     # Weak copyleft interactions
     ("LGPL-2.1", "LGPL-2.1"): (True, "Same license family"),
     ("LGPL-3.0", "LGPL-3.0"): (True, "Same license family"),
@@ -87,13 +80,11 @@ LICENSE_COMPATIBILITY: dict[tuple[str, str], tuple[bool, str]] = {
     ("MPL-2.0", "MIT"): (True, "MPL-2.0 compatible with MIT"),
     ("LGPL-2.1", "GPL-2.0"): (True, "LGPL-2.1 is a subset of GPL-2.0"),
     ("LGPL-3.0", "GPL-3.0"): (True, "LGPL-3.0 is a subset of GPL-3.0"),
-
     # Strong copyleft conflicts
     ("GPL-2.0", "GPL-3.0"): (False, "GPL-2.0 and GPL-3.0 are incompatible"),
     ("GPL-2.0", "AGPL-3.0"): (False, "GPL-2.0 and AGPL-3.0 are incompatible"),
     ("GPL-2.0", "MPL-2.0"): (True, "MPL-2.0 has GPL-2.0 compatibility clause"),
     ("GPL-3.0", "AGPL-3.0"): (True, "AGPL-3.0 is GPL-3.0 with network clause"),
-
     # Network copyleft
     ("SSPL-1.0", "SSPL-1.0"): (True, "Same license"),
     ("SSPL-1.0", "AGPL-3.0"): (False, "SSPL and AGPL are incompatible"),
@@ -155,7 +146,7 @@ def find_conflicts(dependencies: list[Dependency]) -> list[LicenseConflict]:
     # Check all pairs
     license_list = sorted(licenses)
     for i, la in enumerate(license_list):
-        for lb in license_list[i + 1:]:
+        for lb in license_list[i + 1 :]:
             pair = (la, lb)
             if pair in seen_pairs:
                 continue
@@ -163,18 +154,22 @@ def find_conflicts(dependencies: list[Dependency]) -> list[LicenseConflict]:
 
             compatible, notes = check_compatibility(la, lb)
             if compatible is False:
-                conflicts.append(LicenseConflict(
-                    license_a=la,
-                    license_b=lb,
-                    message=notes,
-                    severity=Severity.ERROR,
-                ))
+                conflicts.append(
+                    LicenseConflict(
+                        license_a=la,
+                        license_b=lb,
+                        message=notes,
+                        severity=Severity.ERROR,
+                    )
+                )
             elif compatible is None:
-                conflicts.append(LicenseConflict(
-                    license_a=la,
-                    license_b=lb,
-                    message=notes,
-                    severity=Severity.WARNING,
-                ))
+                conflicts.append(
+                    LicenseConflict(
+                        license_a=la,
+                        license_b=lb,
+                        message=notes,
+                        severity=Severity.WARNING,
+                    )
+                )
 
     return conflicts

@@ -1,4 +1,5 @@
 """CLI interface for LicenseLens."""
+
 from __future__ import annotations
 
 import sys
@@ -26,13 +27,12 @@ def main() -> None:
 
 @main.command()
 @click.argument("path", default=".", type=click.Path(exists=True))
-@click.option("--format", "-f", "fmt", type=click.Choice(["text", "markdown", "json", "csv"]), default="text",
-              help="Output format")
+@click.option("--format", "-f", "fmt", type=click.Choice(["text", "markdown", "json", "csv"]), default="text", help="Output format")
 @click.option("--output", "-o", type=click.Path(), help="Write output to file")
 @click.option("--offline", is_flag=True, help="Skip API calls for license resolution")
-@click.option("--ecosystem", "-e", multiple=True,
-              type=click.Choice(["python", "node", "go", "rust"]),
-              help="Limit to specific ecosystems (can be repeated)")
+@click.option(
+    "--ecosystem", "-e", multiple=True, type=click.Choice(["python", "node", "go", "rust"]), help="Limit to specific ecosystems (can be repeated)"
+)
 def audit(path: str, fmt: str, output: str | None, offline: bool, ecosystem: tuple[str, ...]) -> None:
     """Audit dependencies in a project directory."""
     project_dir = Path(path).resolve()
@@ -170,6 +170,7 @@ def _print_rich_report(report: AuditReport) -> None:
 
         # Group by category
         from licenselens.classifier import classify_license
+
         for lic_id, count in sorted(s.licenses_found.items(), key=lambda x: -x[1]):
             lic = classify_license(lic_id)
             icon = category_icons.get(lic.category.value, "❓")

@@ -1,4 +1,5 @@
 """Tests for Python parser."""
+
 import textwrap
 from pathlib import Path
 
@@ -9,7 +10,8 @@ from licenselens.parser.python import PythonParser
 def test_pyproject_with_tomllib(tmp_path):
     """Test parsing pyproject.toml with tomllib."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test-project"
         version = "0.1.0"
@@ -24,7 +26,8 @@ def test_pyproject_with_tomllib(tmp_path):
             "pytest>=7.0",
             "ruff>=0.15.0",
         ]
-    """))
+    """)
+    )
 
     parser = PythonParser()
     deps = parser.parse(pyproject)
@@ -45,14 +48,16 @@ def test_pyproject_with_tomllib(tmp_path):
 def test_pyproject_complex_versions(tmp_path):
     """Test parsing complex version specifiers."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         dependencies = [
             "numpy>=1.20; python_version>='3.8'",
             "pandas[all]>=1.0",
             "scikit-learn~=1.0",
         ]
-    """))
+    """)
+    )
 
     parser = PythonParser()
     deps = parser.parse(pyproject)
@@ -66,14 +71,16 @@ def test_pyproject_complex_versions(tmp_path):
 def test_requirements_txt(tmp_path):
     """Test parsing requirements.txt."""
     req = tmp_path / "requirements.txt"
-    req.write_text(textwrap.dedent("""\
+    req.write_text(
+        textwrap.dedent("""\
         # This is a comment
         requests>=2.0
         click>=8.0
 
         # Blank line above
         rich>=13.0
-    """))
+    """)
+    )
 
     parser = PythonParser()
     deps = parser.parse(req)
@@ -99,7 +106,8 @@ def test_requirements_txt_with_extras(tmp_path):
 def test_setup_cfg(tmp_path):
     """Test parsing setup.cfg."""
     cfg = tmp_path / "setup.cfg"
-    cfg.write_text(textwrap.dedent("""\
+    cfg.write_text(
+        textwrap.dedent("""\
         [metadata]
         name = test-project
 
@@ -107,7 +115,8 @@ def test_setup_cfg(tmp_path):
         install_requires =
             requests>=2.0
             click>=8.0
-    """))
+    """)
+    )
 
     parser = PythonParser()
     deps = parser.parse(cfg)
@@ -156,12 +165,14 @@ def test_empty_pyproject(tmp_path):
 def test_requirements_comments_and_options(tmp_path):
     """Test that comments and options are skipped."""
     req = tmp_path / "requirements.txt"
-    req.write_text(textwrap.dedent("""\
+    req.write_text(
+        textwrap.dedent("""\
         -r base.txt
         --index-url https://pypi.org/simple
         # Comment
         requests>=2.0
-    """))
+    """)
+    )
 
     parser = PythonParser()
     deps = parser.parse(req)

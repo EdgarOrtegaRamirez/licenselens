@@ -1,4 +1,5 @@
 """Rust dependency file parser (Cargo.toml)."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -44,13 +45,15 @@ class RustParser(BaseParser):
                 else:
                     continue
 
-                deps.append(Dependency(
-                    name=name,
-                    version=version,
-                    ecosystem=Ecosystem.RUST,
-                    is_direct=is_direct,
-                    source_file="Cargo.toml",
-                ))
+                deps.append(
+                    Dependency(
+                        name=name,
+                        version=version,
+                        ecosystem=Ecosystem.RUST,
+                        is_direct=is_direct,
+                        source_file="Cargo.toml",
+                    )
+                )
 
         return deps
 

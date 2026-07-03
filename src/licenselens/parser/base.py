@@ -1,4 +1,5 @@
 """Base parser interface for dependency files."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

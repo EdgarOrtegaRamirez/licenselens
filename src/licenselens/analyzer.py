@@ -1,4 +1,5 @@
 """Main analysis engine for LicenseLens."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -114,58 +115,68 @@ def _generate_issues(deps: list[Dependency]) -> list[LicenseIssue]:
     for dep in deps:
         # Unknown license
         if dep.license_id == "UNKNOWN":
-            issues.append(LicenseIssue(
-                severity=Severity.WARNING,
-                dependency=dep,
-                message=f"License not detected for {dep.name}",
-                recommendation="Manually verify the license",
-                rule_id="UNKNOWN_LICENSE",
-            ))
+            issues.append(
+                LicenseIssue(
+                    severity=Severity.WARNING,
+                    dependency=dep,
+                    message=f"License not detected for {dep.name}",
+                    recommendation="Manually verify the license",
+                    rule_id="UNKNOWN_LICENSE",
+                )
+            )
             continue
 
         # Unlicensed
         if dep.license_id in ("UNLICENSED", "UNLICENSE", "NOASSERTION"):
-            issues.append(LicenseIssue(
-                severity=Severity.WARNING,
-                dependency=dep,
-                message=f"{dep.name} has no license specified",
-                recommendation="Contact the maintainer or find an alternative",
-                rule_id="NO_LICENSE",
-            ))
+            issues.append(
+                LicenseIssue(
+                    severity=Severity.WARNING,
+                    dependency=dep,
+                    message=f"{dep.name} has no license specified",
+                    recommendation="Contact the maintainer or find an alternative",
+                    rule_id="NO_LICENSE",
+                )
+            )
             continue
 
         category = dep.license_category
 
         # Strong copyleft
         if category == LicenseCategory.STRONG_COPYLEFT:
-            issues.append(LicenseIssue(
-                severity=Severity.ERROR,
-                dependency=dep,
-                message=f"{dep.name} uses {dep.license_id} (strong copyleft)",
-                recommendation="All derivative works must be released under the same license",
-                rule_id="STRONG_COPYLEFT",
-            ))
+            issues.append(
+                LicenseIssue(
+                    severity=Severity.ERROR,
+                    dependency=dep,
+                    message=f"{dep.name} uses {dep.license_id} (strong copyleft)",
+                    recommendation="All derivative works must be released under the same license",
+                    rule_id="STRONG_COPYLEFT",
+                )
+            )
 
         # Network copyleft
         if category == LicenseCategory.NETWORK_COPYLEFT:
-            issues.append(LicenseIssue(
-                severity=Severity.CRITICAL,
-                dependency=dep,
-                message=f"{dep.name} uses {dep.license_id} (network copyleft)",
-                recommendation="This license may require releasing source code when providing network services",
-                rule_id="NETWORK_COPYLEFT",
-            ))
+            issues.append(
+                LicenseIssue(
+                    severity=Severity.CRITICAL,
+                    dependency=dep,
+                    message=f"{dep.name} uses {dep.license_id} (network copyleft)",
+                    recommendation="This license may require releasing source code when providing network services",
+                    rule_id="NETWORK_COPYLEFT",
+                )
+            )
 
         # OSI not approved
         lic = classify_license(dep.license_id)
         if not lic.is_osi_approved and category not in (LicenseCategory.UNKNOWN, LicenseCategory.UNLICENSED):
-            issues.append(LicenseIssue(
-                severity=Severity.INFO,
-                dependency=dep,
-                message=f"{dep.license_id} is not OSI-approved",
-                recommendation="Verify the license terms carefully",
-                rule_id="NOT_OSI_APPROVED",
-            ))
+            issues.append(
+                LicenseIssue(
+                    severity=Severity.INFO,
+                    dependency=dep,
+                    message=f"{dep.license_id} is not OSI-approved",
+                    recommendation="Verify the license terms carefully",
+                    rule_id="NOT_OSI_APPROVED",
+                )
+            )
 
     return issues
 

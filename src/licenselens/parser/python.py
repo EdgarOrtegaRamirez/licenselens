@@ -1,4 +1,5 @@
 """Python dependency file parser (pyproject.toml, setup.cfg, requirements.txt)."""
+
 from __future__ import annotations
 
 import re

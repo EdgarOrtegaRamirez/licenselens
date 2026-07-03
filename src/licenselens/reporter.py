@@ -1,4 +1,5 @@
 """Report generation for LicenseLens audit results."""
+
 from __future__ import annotations
 
 import json
@@ -233,9 +234,7 @@ def format_csv(report: AuditReport) -> str:
     for dep in sorted(report.dependencies, key=lambda d: d.name):
         direct = "direct" if dep.is_direct else "transitive"
         lines.append(
-            f'"{dep.name}","{dep.version}","{dep.license_id}",'
-            f'"{dep.license_category.value}","{dep.ecosystem.value}",'
-            f'"{direct}","{dep.source_file}"'
+            f'"{dep.name}","{dep.version}","{dep.license_id}","{dep.license_category.value}","{dep.ecosystem.value}","{direct}","{dep.source_file}"'
         )
     return "\n".join(lines)
 

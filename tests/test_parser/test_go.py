@@ -1,4 +1,5 @@
 """Tests for Go parser."""
+
 import textwrap
 from pathlib import Path
 
@@ -9,7 +10,8 @@ from licenselens.parser.go import GoParser
 def test_go_mod_basic(tmp_path):
     """Test parsing basic go.mod."""
     gomod = tmp_path / "go.mod"
-    gomod.write_text(textwrap.dedent("""\
+    gomod.write_text(
+        textwrap.dedent("""\
         module github.com/example/project
 
         go 1.21
@@ -18,7 +20,8 @@ def test_go_mod_basic(tmp_path):
             github.com/gin-gonic/gin v1.9.1
             github.com/go-sql-driver/mysql v1.7.1
         )
-    """))
+    """)
+    )
 
     parser = GoParser()
     deps = parser.parse(gomod)
@@ -34,7 +37,8 @@ def test_go_mod_basic(tmp_path):
 def test_go_mod_with_indirect(tmp_path):
     """Test parsing go.mod with indirect dependencies."""
     gomod = tmp_path / "go.mod"
-    gomod.write_text(textwrap.dedent("""\
+    gomod.write_text(
+        textwrap.dedent("""\
         module example.com/app
 
         go 1.21
@@ -43,7 +47,8 @@ def test_go_mod_with_indirect(tmp_path):
             github.com/foo/bar v1.0.0
             github.com/baz/qux v2.0.0 // indirect
         )
-    """))
+    """)
+    )
 
     parser = GoParser()
     deps = parser.parse(gomod)
@@ -58,13 +63,15 @@ def test_go_mod_with_indirect(tmp_path):
 def test_go_mod_single_require(tmp_path):
     """Test parsing go.mod with single-line require."""
     gomod = tmp_path / "go.mod"
-    gomod.write_text(textwrap.dedent("""\
+    gomod.write_text(
+        textwrap.dedent("""\
         module example.com/app
 
         go 1.21
 
         require github.com/foo/bar v1.0.0
-    """))
+    """)
+    )
 
     parser = GoParser()
     deps = parser.parse(gomod)
@@ -77,7 +84,8 @@ def test_go_mod_single_require(tmp_path):
 def test_go_mod_with_comments(tmp_path):
     """Test parsing go.mod with comments."""
     gomod = tmp_path / "go.mod"
-    gomod.write_text(textwrap.dedent("""\
+    gomod.write_text(
+        textwrap.dedent("""\
         module example.com/app
 
         go 1.21
@@ -86,7 +94,8 @@ def test_go_mod_with_comments(tmp_path):
             // This is a comment
             github.com/foo/bar v1.0.0
         )
-    """))
+    """)
+    )
 
     parser = GoParser()
     deps = parser.parse(gomod)

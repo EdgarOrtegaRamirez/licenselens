@@ -1,4 +1,5 @@
 """Tests for analyzer."""
+
 import json
 import textwrap
 
@@ -9,11 +10,13 @@ from licenselens.models import Ecosystem, Severity
 def test_analyze_python_project(tmp_path):
     """Test analyzing a Python project."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         name = "test-project"
         dependencies = ["requests>=2.0", "click>=8.0"]
-    """))
+    """)
+    )
 
     report = analyze(tmp_path, project_name="test", offline=True)
 
@@ -25,10 +28,14 @@ def test_analyze_python_project(tmp_path):
 def test_analyze_node_project(tmp_path):
     """Test analyzing a Node.js project."""
     pkg = tmp_path / "package.json"
-    pkg.write_text(json.dumps({
-        "dependencies": {"express": "^4.18.0"},
-        "devDependencies": {"jest": "^29.0.0"},
-    }))
+    pkg.write_text(
+        json.dumps(
+            {
+                "dependencies": {"express": "^4.18.0"},
+                "devDependencies": {"jest": "^29.0.0"},
+            }
+        )
+    )
 
     report = analyze(tmp_path, offline=True)
 
@@ -39,7 +46,8 @@ def test_analyze_node_project(tmp_path):
 def test_analyze_go_project(tmp_path):
     """Test analyzing a Go project."""
     gomod = tmp_path / "go.mod"
-    gomod.write_text(textwrap.dedent("""\
+    gomod.write_text(
+        textwrap.dedent("""\
         module example.com/app
 
         go 1.21
@@ -47,7 +55,8 @@ def test_analyze_go_project(tmp_path):
         require (
             github.com/gin-gonic/gin v1.9.1
         )
-    """))
+    """)
+    )
 
     report = analyze(tmp_path, offline=True)
 
@@ -58,14 +67,16 @@ def test_analyze_go_project(tmp_path):
 def test_analyze_rust_project(tmp_path):
     """Test analyzing a Rust project."""
     cargo = tmp_path / "Cargo.toml"
-    cargo.write_text(textwrap.dedent("""\
+    cargo.write_text(
+        textwrap.dedent("""\
         [package]
         name = "test"
         version = "0.1.0"
 
         [dependencies]
         serde = "1.0"
-    """))
+    """)
+    )
 
     report = analyze(tmp_path, offline=True)
 
@@ -84,10 +95,12 @@ def test_analyze_empty_project(tmp_path):
 def test_analyze_unknown_licenses(tmp_path):
     """Test that unknown licenses generate warnings."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         dependencies = ["some-obscure-lib>=1.0"]
-    """))
+    """)
+    )
 
     report = analyze(tmp_path, offline=True)
 
@@ -124,12 +137,14 @@ def test_detect_ecosystem_empty(tmp_path):
 def test_parse_dependencies_dedup(tmp_path):
     """Test that dependencies are deduplicated."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         dependencies = ["requests>=2.0"]
         [project.optional-dependencies]
         dev = ["requests>=2.0"]
-    """))
+    """)
+    )
 
     deps = parse_dependencies(tmp_path)
     # Should be deduplicated since same name+version
@@ -139,10 +154,12 @@ def test_parse_dependencies_dedup(tmp_path):
 def test_analyze_summary_categories(tmp_path):
     """Test that categories are properly counted."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         dependencies = ["requests>=2.0", "click>=8.0"]
-    """))
+    """)
+    )
 
     report = analyze(tmp_path, offline=True)
     assert "unknown" in report.summary.categories
@@ -152,10 +169,12 @@ def test_analyze_summary_categories(tmp_path):
 def test_analyze_report_warnings(tmp_path):
     """Test that warnings are generated for unknown licenses."""
     pyproject = tmp_path / "pyproject.toml"
-    pyproject.write_text(textwrap.dedent("""\
+    pyproject.write_text(
+        textwrap.dedent("""\
         [project]
         dependencies = ["some-lib>=1.0"]
-    """))
+    """)
+    )
 
     report = analyze(tmp_path, offline=True)
     assert len(report.warnings) >= 1

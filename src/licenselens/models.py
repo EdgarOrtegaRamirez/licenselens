@@ -1,4 +1,5 @@
 """Data models for LicenseLens."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -7,6 +8,7 @@ from enum import Enum
 
 class LicenseCategory(Enum):
     """License categories for classification."""
+
     PERMISSIVE = "permissive"
     WEAK_COPYLEFT = "weak_copyleft"
     STRONG_COPYLEFT = "strong_copyleft"
@@ -18,6 +20,7 @@ class LicenseCategory(Enum):
 
 class Ecosystem(Enum):
     """Supported ecosystems."""
+
     PYTHON = "python"
     NODE = "node"
     GO = "go"
@@ -27,6 +30,7 @@ class Ecosystem(Enum):
 
 class Severity(Enum):
     """Issue severity levels."""
+
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
@@ -36,6 +40,7 @@ class Severity(Enum):
 @dataclass
 class License:
     """A software license."""
+
     spdx_id: str
     name: str
     category: LicenseCategory
@@ -47,6 +52,7 @@ class License:
 @dataclass
 class Dependency:
     """A project dependency with license info."""
+
     name: str
     version: str
     ecosystem: Ecosystem
@@ -63,6 +69,7 @@ class Dependency:
 @dataclass
 class LicenseIssue:
     """A detected license issue."""
+
     severity: Severity
     dependency: Dependency
     message: str
@@ -73,6 +80,7 @@ class LicenseIssue:
 @dataclass
 class LicenseConflict:
     """A license compatibility conflict."""
+
     license_a: str
     license_b: str
     message: str
@@ -82,6 +90,7 @@ class LicenseConflict:
 @dataclass
 class AuditSummary:
     """Summary of a license audit."""
+
     total_dependencies: int = 0
     direct_dependencies: int = 0
     transitive_dependencies: int = 0
@@ -95,6 +104,7 @@ class AuditSummary:
 @dataclass
 class AuditReport:
     """Complete audit report."""
+
     project_name: str
     summary: AuditSummary
     dependencies: list[Dependency] = field(default_factory=list)

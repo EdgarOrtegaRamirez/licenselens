@@ -1,4 +1,5 @@
 """Tests for license classifier."""
+
 from licenselens.classifier import (
     KNOWN_LICENSES,
     check_compatibility,

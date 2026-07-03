@@ -1,4 +1,5 @@
 """Node.js dependency file parser (package.json)."""
+
 from __future__ import annotations
 
 import json
@@ -43,12 +44,14 @@ class NodeParser(BaseParser):
             for name, version in dep_dict.items():
                 if not isinstance(version, str):
                     continue
-                deps.append(Dependency(
-                    name=name.lower(),
-                    version=version,
-                    ecosystem=Ecosystem.NODE,
-                    is_direct=is_direct,
-                    source_file=f"package.json:{section}",
-                ))
+                deps.append(
+                    Dependency(
+                        name=name.lower(),
+                        version=version,
+                        ecosystem=Ecosystem.NODE,
+                        is_direct=is_direct,
+                        source_file=f"package.json:{section}",
+                    )
+                )
 
         return deps

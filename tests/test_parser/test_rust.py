@@ -1,4 +1,5 @@
 """Tests for Rust parser."""
+
 import textwrap
 from pathlib import Path
 
@@ -9,7 +10,8 @@ from licenselens.parser.rust import RustParser
 def test_cargo_toml_basic(tmp_path):
     """Test parsing basic Cargo.toml."""
     cargo = tmp_path / "Cargo.toml"
-    cargo.write_text(textwrap.dedent("""\
+    cargo.write_text(
+        textwrap.dedent("""\
         [package]
         name = "test-project"
         version = "0.1.0"
@@ -22,7 +24,8 @@ def test_cargo_toml_basic(tmp_path):
 
         [dev-dependencies]
         assert_cmd = "2.0"
-    """))
+    """)
+    )
 
     parser = RustParser()
     deps = parser.parse(cargo)
@@ -45,10 +48,12 @@ def test_cargo_toml_basic(tmp_path):
 def test_cargo_toml_inline_table(tmp_path):
     """Test parsing Cargo.toml with inline tables."""
     cargo = tmp_path / "Cargo.toml"
-    cargo.write_text(textwrap.dedent("""\
+    cargo.write_text(
+        textwrap.dedent("""\
         [dependencies]
         serde = { version = "1.0", features = ["derive"] }
-    """))
+    """)
+    )
 
     parser = RustParser()
     deps = parser.parse(cargo)
@@ -72,10 +77,12 @@ def test_cargo_toml_empty(tmp_path):
 def test_cargo_toml_string_values(tmp_path):
     """Test parsing Cargo.toml with string version values."""
     cargo = tmp_path / "Cargo.toml"
-    cargo.write_text(textwrap.dedent("""\
+    cargo.write_text(
+        textwrap.dedent("""\
         [dependencies]
         serde = "1.0"
-    """))
+    """)
+    )
 
     parser = RustParser()
     deps = parser.parse(cargo)

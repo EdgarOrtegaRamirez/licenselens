@@ -1,4 +1,5 @@
 """Tests for reporter."""
+
 from licenselens.models import (
     AuditReport,
     AuditSummary,
@@ -21,15 +22,33 @@ from licenselens.reporter import (
 def _make_report():
     """Create a sample audit report for testing."""
     deps = [
-        Dependency(name="requests", version="2.28.0", ecosystem=Ecosystem.PYTHON,
-                   license_id="Apache-2.0", license_name="Apache License 2.0",
-                   license_category=LicenseCategory.PERMISSIVE, is_direct=True),
-        Dependency(name="flask", version="2.3.0", ecosystem=Ecosystem.PYTHON,
-                   license_id="BSD-3-Clause", license_name="BSD 3-Clause License",
-                   license_category=LicenseCategory.PERMISSIVE, is_direct=True),
-        Dependency(name="sqlalchemy", version="2.0", ecosystem=Ecosystem.PYTHON,
-                   license_id="MIT", license_name="MIT License",
-                   license_category=LicenseCategory.PERMISSIVE, is_direct=True),
+        Dependency(
+            name="requests",
+            version="2.28.0",
+            ecosystem=Ecosystem.PYTHON,
+            license_id="Apache-2.0",
+            license_name="Apache License 2.0",
+            license_category=LicenseCategory.PERMISSIVE,
+            is_direct=True,
+        ),
+        Dependency(
+            name="flask",
+            version="2.3.0",
+            ecosystem=Ecosystem.PYTHON,
+            license_id="BSD-3-Clause",
+            license_name="BSD 3-Clause License",
+            license_category=LicenseCategory.PERMISSIVE,
+            is_direct=True,
+        ),
+        Dependency(
+            name="sqlalchemy",
+            version="2.0",
+            ecosystem=Ecosystem.PYTHON,
+            license_id="MIT",
+            license_name="MIT License",
+            license_category=LicenseCategory.PERMISSIVE,
+            is_direct=True,
+        ),
     ]
 
     issues = [
@@ -98,6 +117,7 @@ def test_format_json():
     json_str = format_json(report)
 
     import json
+
     data = json.loads(json_str)
 
     assert data["project_name"] == "test-project"
@@ -152,6 +172,7 @@ def test_format_json_structure():
     """Test JSON output has correct structure."""
     report = _make_report()
     import json
+
     data = json.loads(format_json(report))
 
     assert "project_name" in data

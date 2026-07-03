@@ -1,4 +1,5 @@
 """Go dependency file parser (go.mod)."""
+
 from __future__ import annotations
 
 import re
@@ -45,7 +46,7 @@ class GoParser(BaseParser):
                 if dep:
                     deps.append(dep)
             elif stripped.startswith("require "):
-                dep = self._parse_require_line(stripped[len("require "):])
+                dep = self._parse_require_line(stripped[len("require ") :])
                 if dep:
                     deps.append(dep)
 

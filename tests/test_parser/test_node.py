@@ -1,4 +1,5 @@
 """Tests for Node.js parser."""
+
 import json
 from pathlib import Path
 
@@ -9,18 +10,22 @@ from licenselens.parser.node import NodeParser
 def test_package_json_basic(tmp_path):
     """Test parsing basic package.json."""
     pkg = tmp_path / "package.json"
-    pkg.write_text(json.dumps({
-        "name": "test-pkg",
-        "version": "1.0.0",
-        "dependencies": {
-            "express": "^4.18.0",
-            "lodash": "^4.17.21",
-        },
-        "devDependencies": {
-            "jest": "^29.0.0",
-            "eslint": "^8.0.0",
-        },
-    }))
+    pkg.write_text(
+        json.dumps(
+            {
+                "name": "test-pkg",
+                "version": "1.0.0",
+                "dependencies": {
+                    "express": "^4.18.0",
+                    "lodash": "^4.17.21",
+                },
+                "devDependencies": {
+                    "jest": "^29.0.0",
+                    "eslint": "^8.0.0",
+                },
+            }
+        )
+    )
 
     parser = NodeParser()
     deps = parser.parse(pkg)
@@ -40,12 +45,16 @@ def test_package_json_basic(tmp_path):
 def test_package_json_all_sections(tmp_path):
     """Test parsing all dependency sections."""
     pkg = tmp_path / "package.json"
-    pkg.write_text(json.dumps({
-        "dependencies": {"a": "1.0"},
-        "devDependencies": {"b": "2.0"},
-        "peerDependencies": {"c": "3.0"},
-        "optionalDependencies": {"d": "4.0"},
-    }))
+    pkg.write_text(
+        json.dumps(
+            {
+                "dependencies": {"a": "1.0"},
+                "devDependencies": {"b": "2.0"},
+                "peerDependencies": {"c": "3.0"},
+                "optionalDependencies": {"d": "4.0"},
+            }
+        )
+    )
 
     parser = NodeParser()
     deps = parser.parse(pkg)
